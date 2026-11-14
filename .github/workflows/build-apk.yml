@@ -22,7 +22,7 @@ jobs:
           ./gradlew --no-daemon assembleRelease
           size=$(stat -c %s app/build/outputs/apk/release/app-release.apk)
           echo "release APK: $((size / 1024)) KB"
-          cp ~/.android/debug.keystore app/build/outputs/apk/release/debug.keystore
+          k=$(find ~/.android ~/.config/.android "$ANDROID_USER_HOME" -name debug.keystore 2>/dev/null | head -1); [ -n "$k" ] && cp "$k" app/build/outputs/apk/release/debug.keystore || echo "no debug keystore found"
       - uses: actions/upload-artifact@v4
         with:
           name: launcher-apk
